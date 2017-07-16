@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 const Product = mongoose.model('Product');
+const ValidationContract = require('../validators/fluent-validator')
 
 
 exports.get = (req, res, next) => {
@@ -22,7 +23,6 @@ exports.get = (req, res, next) => {
 
 }
 
-
 exports.getBySlug = (req, res, next) => {
     Product
         .findOne({
@@ -41,7 +41,6 @@ exports.getBySlug = (req, res, next) => {
         });
 
 }
-
 
 exports.getById = (req, res, next) => {
     Product
@@ -80,10 +79,19 @@ exports.getByTag = (req, res, next) => {
 
 }
 
-
 exports.post = (req, res, next) => {
-    var product = new Product(req.body);
+    let contract = new ValidationContract();
+    contract.hasMinLne(req.body.title, 3, 'O título deve conter pelo menos 3 ');
+    contract.hasMinLne(req.body.slug, 3, 'O titulo deve conter pelo menos 3 ');
+    contract.hasMinLne(req.body.description, 3, 'O titulo deve conter pelo menos 3 ');
 
+    //se os dados forem invalidos
+    if (!contract.isValid()) {
+        res.status(400).send(contract.errors()).end();
+        return;
+    }
+
+    var product = new Product(req.body);
     product
         .save()
         .then(x => {
@@ -105,7 +113,6 @@ exports.post = (req, res, next) => {
 };
 
 exports.put = (req, res, next) => {
-    const id = req.param.id;
     Product.findByAndUpdate(req.param.id, {
         $set: {
             title: req.body.title,
@@ -113,22 +120,21 @@ exports.put = (req, res, next) => {
             price: req.body.price
             , slug: req.body.slug
         }
-    })
-        .then(x => {
-            res.status(201).send({
-                message: 'Produto atualizado com sucesso!'
-            });
-        }).catch(e => {
-            res.status(400).send({
-                message: 'Falha ao atualizar produto',
-                data: e
-            })
+    }).then(x => {
+        res.status(201).send({
+            message: 'Produto atualizado com sucesso!'
+        });
+    }).catch(e => {
+        res.status(400).send({
+            message: 'Falha ao atualizar produto',
+            data: e
         })
+    })
 
 };
 
 exports.delete = (req, res, next) => {
-     const id = req.param.id;
+    const id = req.param.id;
     Product.findOneAndRemove(req.body.id)
         .then(x => {
             res.status(200).send({

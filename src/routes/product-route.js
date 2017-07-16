@@ -9,7 +9,6 @@ router.get('/:slug',controller.getBySlug);
 router.get('/admin/:id',controller.getById);
 router.get('/tag/:tags',controller.getByTag);
 
-
 router.post('/',controller.post);
 
 router.put('/:id', controller.put);
