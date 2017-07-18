@@ -8,8 +8,7 @@ const app = express();
 const router = express.Router();
 
 // Connecta ao banco
-mongoose.createConnection('mongodb://mps:mps@ds034807.mlab.com:34807/node-store');
-mongoose.connect();
+mongoose.connect('mongodb://mps:mps@ds034807.mlab.com:34807/node-store');
 //mongoose.connect(config.connectionString);
 
 // Carrega os Models
