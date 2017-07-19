@@ -13,7 +13,7 @@ mongoose.connect('mongodb://mps:mps@ds034807.mlab.com:34807/node-store');
 
 // Carrega os Models
  const Product = require('./models/product');
-// const Customer = require('./models/customer');
+ const Customer = require('./models/customer');
 // const Order = require('./models/order');
 
 // Carrega as Rotas
