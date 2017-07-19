@@ -15,7 +15,7 @@ const schema = new Schema({
         default: Date.now
     },
     status: {
-        type: string,
+        type: String,
         require: true,
         enum: ['create,done'],
         default: 'create'
