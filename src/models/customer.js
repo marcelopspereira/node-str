@@ -11,7 +11,7 @@ const schema = new Schema({
     },
     email: {
         type: String,
-        require: [true, 'o email é obrigatorio'],
+        require: true,
         trim: true,
         index: true,
         unique: true
