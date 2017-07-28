@@ -1,13 +1,16 @@
-'use strict'
+'use strict';
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
+    customer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Customer'
+    },
     number: {
         type: String,
-        required: true,
-        trim: true
+        required: true
     },
     createDate: {
         type: Date,
@@ -16,30 +19,25 @@ const schema = new Schema({
     },
     status: {
         type: String,
-        require: true,
-        enum: ['create,done'],
-        default: 'create'
-    },
-
-    customer: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Customer'
+        required: true,
+        enum: ['created', 'done'],
+        default: 'created'
     },
     items: [{
-        quantiy: {
+        quantity: {
             type: Number,
-            require: true,
+            required: true,
             default: 1
         },
         price: {
             type: Number,
-            require: true,
+            required: true
         },
         product: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product'
-        },
-    }]
+        }
+    }],
 });
 
 module.exports = mongoose.model('Order', schema);

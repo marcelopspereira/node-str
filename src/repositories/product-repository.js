@@ -12,14 +12,12 @@ exports.get = async () => {
     return res;
 }
 
-exports.getBySlug = async (slug) => {
-   // console.log(slug);
+exports.getBySlug = async(slug) => {
     const res = await Product
         .findOne({
             slug: slug,
             active: true
         }, 'title description price slug tags');
-    //console.log(res);
     return res;
 }
 
