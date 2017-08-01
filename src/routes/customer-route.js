@@ -10,7 +10,8 @@ router.get('/', controller.get);
 router.get('/:id', controller.getById);
 
 router.post('/authenticate', controller.authenticate);
-router.post('/', controller.post);
+router.post('/refres-token', authService.authorize, controller.refreshToken);
+router.post('/', authService.authorize, controller.post);
 router.put('/:id', authService.authorize, controller.put);
 router.delete('/', authService.authorize, controller.delete);
 

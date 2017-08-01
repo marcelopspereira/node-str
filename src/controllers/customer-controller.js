@@ -46,7 +46,8 @@ exports.authenticate = async(req, res, next) => {
             email: req.body.email,
             password: md5(req.body.password + global.SALT_KEY)
         });
-        authService.generateToken({
+        const token = authService.generateToken({
+            id: customer._id,
             email: customer.email,
             name: customer.name
         });
@@ -70,6 +71,53 @@ exports.authenticate = async(req, res, next) => {
         });
     }
 };
+
+
+
+exports.refreshToken = async(req, res, next) => {
+    let contract = new ValidationContract();
+    contract.isEmail(req.body.email, 'O email inválido ');
+    contract.hasMinLen(req.body.password, 6, 'A senha deve conter pelo menos 6 caracteres ');
+
+    //se os dados forem invalidos
+    if (!contract.isValid()) {
+        res.status(400).send(contract.errors()).end();
+        return;
+    }
+    try {
+        const token = req.body.token || req.query.token || req.headers['x-access-token'];
+        const data = await authService.decodeToken(token);
+
+        const customer = await repository.getById(data.id);
+
+        if (!customer) {
+            res.status(404).send({
+                message: 'Cliente não encontrado'
+            });
+            return;
+        }
+
+
+        const tokenData = authService.generateToken({
+            id: customer._id,
+            email: customer.email,
+            name: customer.name
+        });
+
+        res.status(201).send({
+            token: token,
+            data: {
+                email: customer.email,
+                name: customer.name
+            }
+        });
+    } catch (e) {
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição'
+        });
+    }
+};
+
 
 
 exports.post = async(req, res, next) => {
