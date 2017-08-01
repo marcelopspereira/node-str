@@ -33,7 +33,14 @@ const schema = new Schema({
     tags: [{
         type: String,
         require: true
-    }]
+    }],
+    image: {
+        type: String,
+        require: true,
+        trim: true
+    }
 });
 
 module.exports = mongoose.model('Product', schema);
+//https://medium.com/technoetics/easiest-way-to-automate-image-upload-to-cloudinary-using-nodejs-5014b7cb629f
+//http://cloudinary.com/documentation/node_image_upload
